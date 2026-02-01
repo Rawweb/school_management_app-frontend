@@ -29,7 +29,7 @@ export const fadeUp = {
 export const imageReveal = {
   hidden: {
     opacity: 0,
-    scale: 0.9,
+    scale: 1.2,
   },
   show: {
     opacity: 1,

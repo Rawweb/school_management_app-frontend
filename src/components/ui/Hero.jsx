@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Import images
 import hero1 from '../../assets/hero.jpg';
 import hero2 from '../../assets/hero-2.jpg';
 import hero3 from '../../assets/hero-3.jpg';
+
+import { fadeUp, sectionContainer } from '../../motion/variants';
 
 const slides = [
   {
@@ -30,23 +33,20 @@ const slides = [
 ];
 
 const Hero = () => {
-  // Track which slide is currently active
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Auto change slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide(prev => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
 
-    // Cleanup interval on unmount
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section
       id="home"
-      className="relative overflow-hidden h-125 sm:h-150] lg:h-187.5"
+      className="relative overflow-hidden h-125 sm:h-150 lg:h-187.5"
     >
       {/* Slides */}
       {slides.map((slide, index) => (
@@ -61,33 +61,55 @@ const Hero = () => {
             alt={slide.title}
             className="w-full h-full object-cover"
           />
-
           <div className="absolute inset-0 bg-black/60" />
         </div>
       ))}
 
       {/* Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center">
-        <div className="text-center px-6 max-w-3xl text-white">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 transition-all duration-500">
-            {slides[currentSlide].title}
-          </h1>
+      <motion.div
+        className="relative z-10 w-full h-full flex items-center justify-center"
+        variants={sectionContainer}
+        initial="hidden"
+        animate="show"
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentSlide}
+            className="text-center px-6 max-w-3xl text-white"
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            variants={sectionContainer}
+          >
+            <motion.h1
+              variants={fadeUp}
+              className="text-3xl md:text-5xl font-bold mb-4"
+            >
+              {slides[currentSlide].title}
+            </motion.h1>
 
-          <p className="text-white/80 text-base md:text-lg mb-8 transition-all duration-500">
-            {slides[currentSlide].description}
-          </p>
+            <motion.p
+              variants={fadeUp}
+              className="text-white/80 text-base md:text-lg mb-8"
+            >
+              {slides[currentSlide].description}
+            </motion.p>
 
-          <div className="flex justify-center items-center gap-4">
-            <button className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors">
-              Go to School Portal
-            </button>
+            <motion.div
+              variants={fadeUp}
+              className="flex justify-center items-center gap-4"
+            >
+              <button className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors">
+                Go to School Portal
+              </button>
 
-            <button className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors">
-              Explore Gallery
-            </button>
-          </div>
-        </div>
-      </div>
+              <button className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors">
+                Explore Gallery
+              </button>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };

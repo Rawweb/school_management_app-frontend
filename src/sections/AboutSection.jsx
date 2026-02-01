@@ -89,17 +89,26 @@ const AboutSection = () => {
                 variants={cardReveal}
                 className="group border border-primary p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
               >
-                <div className="mb-4 size-10 flex items-center justify-center rounded-xl bg-primary group-hover:bg-primary-hover transition-colors">
+                <motion.div
+                  variants={fadeUp}
+                  className="mb-4 size-10 flex items-center justify-center rounded-xl bg-primary group-hover:bg-primary-hover transition-colors"
+                >
                   {item.icon}
-                </div>
+                </motion.div>
 
-                <h3 className="text-lg font-medium mb-2">
+                <motion.h3
+                  variants={imageReveal}
+                  className="text-lg font-medium mb-2"
+                >
                   {item.title}
-                </h3>
+                </motion.h3>
 
-                <p className="text-sm text-text-muted leading-relaxed">
+                <motion.p
+                  variants={fadeUp}
+                  className="text-sm text-text-muted leading-relaxed"
+                >
                   {item.description}
-                </p>
+                </motion.p>
               </motion.div>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 import logo from '../../assets/logo.png';
 import ThemeToggle from '../ui/ThemeToggle';
@@ -12,9 +12,26 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border font-semibold bg-bg">
+    <nav
+      className={`
+        sticky top-0 z-50 font-semibold transition-all duration-300
+        ${scrolled
+          ? 'bg-bg/80 backdrop-blur border-b border-border shadow-sm'
+          : 'bg-transparent'}
+      `}
+    >
       <div className="container flex gap-4 items-center justify-between h-24">
         {/* logo */}
         <div className="flex items-center gap-2 cursor-pointer group">
@@ -41,7 +58,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className='flex items-center gap-2'>
+        <div className="flex items-center gap-2">
           {/* login button */}
           <button className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
             Login
@@ -62,7 +79,9 @@ const Navbar = () => {
 
       {/* mobile navigations */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
       >
         <div className="flex flex-col gap-6 px-6 py-6 bg-bg border-b border-border">
           {navLinks.map(link => (
@@ -70,7 +89,7 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               className="text-text-muted hover:text-text transition"
-              onClick={() => setIsOpen(false)} // close menu on click
+              onClick={() => setIsOpen(false)}
             >
               {link.label}
             </a>
