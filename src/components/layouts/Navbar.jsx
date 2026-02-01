@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 import logo from '../../assets/logo.png';
+import ThemeToggle from '../ui/ThemeToggle';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -40,10 +41,15 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* login button */}
-        <button className="hidden md:block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-hover transition-colors">
-          Login
-        </button>
+        <div className='flex items-center gap-2'>
+          {/* login button */}
+          <button className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
+            Login
+          </button>
+
+          {/* theme toggle */}
+          <ThemeToggle />
+        </div>
 
         {/* mobile menu button */}
         <button

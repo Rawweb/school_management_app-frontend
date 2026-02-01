@@ -44,27 +44,30 @@ const Hero = () => {
   }, []);
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden">
+    <section
+      id="home"
+      className="relative overflow-hidden h-125 sm:h-150] lg:h-187.5"
+    >
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
+            index === currentSlide ? 'opacity-100' : 'opacity-0'
+          }`}
         >
-          {/* Background image */}
           <img
             src={slide.image}
             alt={slide.title}
             className="w-full h-full object-cover"
           />
 
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black/60" />
         </div>
       ))}
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center justify-center">
+      <div className="relative z-10 w-full h-full flex items-center justify-center">
         <div className="text-center px-6 max-w-3xl text-white">
           <h1 className="text-3xl md:text-5xl font-bold mb-4 transition-all duration-500">
             {slides[currentSlide].title}
@@ -74,13 +77,12 @@ const Hero = () => {
             {slides[currentSlide].description}
           </p>
 
-          {/* Button stays the same */}
-          <div className='flex justify-center items-center gap-4'>
-            <button className="bg-primary px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors">
+          <div className="flex justify-center items-center gap-4">
+            <button className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors">
               Go to School Portal
             </button>
 
-            <button className="border-2 border-primary hover:text-primary px-6 py-3 rounded-lg transition-colors">
+            <button className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors">
               Explore Gallery
             </button>
           </div>
