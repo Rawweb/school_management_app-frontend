@@ -8,6 +8,7 @@ const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Features', href: '#features' },
   { label: 'Gallery', href: '#gallery' },
+  { label: 'Team', href: '#team' },
 ];
 
 const Navbar = () => {
@@ -27,9 +28,11 @@ const Navbar = () => {
     <nav
       className={`
         sticky top-0 z-50 font-semibold transition-all duration-300
-        ${scrolled
-          ? 'bg-bg/80 backdrop-blur border-b border-border shadow-sm'
-          : 'bg-transparent'}
+        ${
+          scrolled
+            ? 'bg-bg/80 backdrop-blur border-b border-border shadow-sm'
+            : 'bg-transparent'
+        }
       `}
     >
       <div className="container flex gap-4 items-center justify-between h-24">
@@ -46,7 +49,7 @@ const Navbar = () => {
         </div>
 
         {/* desktop navigations */}
-        <div className="hidden md:flex gap-6 md:gap-10">
+        <div className="hidden md:flex gap-4 lg:gap-10">
           {navLinks.map(link => (
             <a
               key={link.href}
@@ -63,18 +66,18 @@ const Navbar = () => {
           <button className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
             Login
           </button>
-
+          
           {/* theme toggle */}
-          <ThemeToggle />
+          <ThemeToggle /> 
+          
+          {/* mobile menu button */}
+          <button
+            className="md:hidden text-text hover:text-primary-hover"
+            onClick={() => setIsOpen(prev => !prev)}
+          >
+            {isOpen ? <HiOutlineX size={26} /> : <HiOutlineMenu size={26} />}
+          </button>
         </div>
-
-        {/* mobile menu button */}
-        <button
-          className="md:hidden text-text hover:text-primary-hover"
-          onClick={() => setIsOpen(prev => !prev)}
-        >
-          {isOpen ? <HiOutlineX size={26} /> : <HiOutlineMenu size={26} />}
-        </button>
       </div>
 
       {/* mobile navigations */}

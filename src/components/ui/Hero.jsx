@@ -6,7 +6,7 @@ import hero1 from '../../assets/hero.jpg';
 import hero2 from '../../assets/hero-2.jpg';
 import hero3 from '../../assets/hero-3.jpg';
 
-import { fadeUp, sectionContainer } from '../../motion/variants';
+import { fadeUp, sectionContainer, slideX } from '../../motion/variants';
 
 const slides = [
   {
@@ -95,17 +95,20 @@ const Hero = () => {
               {slides[currentSlide].description}
             </motion.p>
 
-            <motion.div
-              variants={fadeUp}
-              className="flex justify-center items-center gap-4"
-            >
-              <button className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors">
+            <motion.div className="flex justify-center items-center gap-4">
+              <motion.button
+                variants={slideX('left')}
+                className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors"
+              >
                 Go to School Portal
-              </button>
+              </motion.button>
 
-              <button className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors">
+              <motion.button
+                variants={slideX('right')}
+                className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors"
+              >
                 Explore Gallery
-              </button>
+              </motion.button>
             </motion.div>
           </motion.div>
         </AnimatePresence>

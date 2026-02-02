@@ -25,6 +25,22 @@ export const fadeUp = {
   },
 };
 
+// Text animation (slide left 0r right)
+export const slideX = direction => ({
+  hidden: {
+    opacity: 0,
+    x: direction === 'left' ? -40 : 40,
+  },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+});
+
 // Image animation (scale + fade)
 export const imageReveal = {
   hidden: {
