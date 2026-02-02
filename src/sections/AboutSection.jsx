@@ -28,13 +28,13 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="container py-24">
+    <motion.section id="about" className="container py-24">
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
         variants={sectionContainer}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.3 }} // animate every time it enters
+        viewport={{ once: true, amount: 0.3 }}
       >
         {/* left - image */}
         <motion.div
@@ -57,7 +57,7 @@ const AboutSection = () => {
         </motion.div>
 
         {/* right - card content */}
-        <div className="w-full">
+        <motion.div className="w-full" variants={fadeUp}>
           <motion.span
             variants={fadeUp}
             className="inline-block bg-primary px-4 py-2 text-white mb-4 border-l-6 border-text"
@@ -89,15 +89,12 @@ const AboutSection = () => {
                 variants={cardReveal}
                 className="group border border-primary p-6 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
               >
-                <motion.div
-                  variants={fadeUp}
-                  className="mb-4 size-10 flex items-center justify-center rounded-xl bg-primary group-hover:bg-primary-hover transition-colors"
-                >
+                <div className="mb-4 size-10 flex items-center justify-center rounded-xl bg-primary group-hover:bg-primary-hover transition-colors">
                   {item.icon}
-                </motion.div>
+                </div>
 
                 <motion.h3
-                  variants={imageReveal}
+                  variants={fadeUp}
                   className="text-lg font-medium mb-2"
                 >
                   {item.title}
@@ -112,9 +109,9 @@ const AboutSection = () => {
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 };
 

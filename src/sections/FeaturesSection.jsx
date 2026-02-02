@@ -50,15 +50,18 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="py-24 border-t-2 border-b-2 border-border">
-      <div className="container ">
+    <section
+      id="features"
+      className="py-24 border-t-2 border-b-2 border-border"
+    >
+      <div className="container">
         {/* Section header */}
         <motion.div
-          variants={fadeUp}
+          className="mb-16"
+          variants={sectionContainer}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.3 }}
-          className="mb-16"
+          viewport={{ once: true, amount: 0.3 }}
         >
           <motion.span
             variants={slideX('right')}
@@ -68,7 +71,7 @@ const FeaturesSection = () => {
           </motion.span>
 
           <motion.h2
-            variants={imageReveal}
+            variants={fadeUp}
             className="text-3xl md:text-4xl font-bold mb-3"
           >
             Powerful Features for Students
@@ -86,7 +89,7 @@ const FeaturesSection = () => {
           variants={sectionContainer}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.3 }}
         >
           {features.map((item, index) => (
             <motion.div
@@ -118,7 +121,7 @@ const FeaturesSection = () => {
                 </motion.h3>
 
                 <motion.p
-                  variants={imageReveal}
+                  variants={fadeUp}
                   className="mt-3 text-sm text-text-muted leading-relaxed"
                 >
                   {item.description}

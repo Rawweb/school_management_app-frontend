@@ -3,7 +3,12 @@ import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { team } from '../constants/teamData';
 import { FaStar } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fadeUp, slideX, imageReveal, sectionContainer } from '../motion/variants';
+import {
+  fadeUp,
+  slideX,
+  imageReveal,
+  sectionContainer,
+} from '../motion/variants';
 
 const TeamSection = () => {
   const [current, setCurrent] = useState(0);
@@ -28,13 +33,13 @@ const TeamSection = () => {
 
   return (
     <section id="team" className="py-24 border-b-2 border-border">
-      <div  className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start container ">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start container">
         {/* LEFT CONTENT */}
         <motion.div
-          variants={fadeUp}
-          initial= "hidden"
+          variants={sectionContainer}
+          initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
         >
           <motion.span
             variants={slideX('right')}
@@ -44,7 +49,7 @@ const TeamSection = () => {
           </motion.span>
 
           <motion.h2
-            variants={imageReveal}
+            variants={fadeUp}
             className="text-3xl md:text-4xl font-bold mt-4 mb-6"
           >
             Meet the Team Behind <span className="text-primary">CampusHub</span>
@@ -74,7 +79,7 @@ const TeamSection = () => {
           </motion.p>
 
           <motion.div
-            variants={imageReveal}
+            variants={fadeUp}
             className="border w-fit px-4 py-2 rounded-full border-primary hover:bg-primary-hover hover:text-white transition-colors cursor-pointer"
           >
             Join the team

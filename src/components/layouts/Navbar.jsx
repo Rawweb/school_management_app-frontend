@@ -17,7 +17,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 5);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -27,11 +27,11 @@ const Navbar = () => {
   return (
     <nav
       className={`
-        sticky top-0 z-50 font-semibold transition-all duration-300
+        fixed top-0 left-0 w-full z-50 font-semibold transition-all duration-300
         ${
           scrolled
             ? 'bg-bg/80 backdrop-blur border-b border-border shadow-sm'
-            : 'bg-transparent'
+            : ''
         }
       `}
     >

@@ -6,7 +6,11 @@ import hero1 from '../../assets/hero.jpg';
 import hero2 from '../../assets/hero-2.jpg';
 import hero3 from '../../assets/hero-3.jpg';
 
-import { fadeUp, sectionContainer, slideX } from '../../motion/variants';
+import {
+  sectionContainer,
+  slideX,
+  imageReveal,
+} from '../../motion/variants';
 
 const slides = [
   {
@@ -76,20 +80,20 @@ const Hero = () => {
           <motion.div
             key={currentSlide}
             className="text-center px-6 max-w-3xl text-white"
+            variants={sectionContainer}
             initial="hidden"
             animate="show"
             exit="hidden"
-            variants={sectionContainer}
           >
             <motion.h1
-              variants={fadeUp}
+              variants={imageReveal}
               className="text-3xl md:text-5xl font-bold mb-4"
             >
               {slides[currentSlide].title}
             </motion.h1>
 
             <motion.p
-              variants={fadeUp}
+              variants={slideX('right')}
               className="text-white/80 text-base md:text-lg mb-8"
             >
               {slides[currentSlide].description}
@@ -105,7 +109,7 @@ const Hero = () => {
 
               <motion.button
                 variants={slideX('right')}
-                className="hidden md:flex border-2 border-primary hover:text-primary px-6 py-3 transition-colors"
+                className="hidden md:flex border-2 border-primary hover:bg-primary-hover px-6 py-3 transition-colors"
               >
                 Explore Gallery
               </motion.button>

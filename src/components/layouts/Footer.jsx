@@ -1,6 +1,11 @@
 import logo from '../../assets/logo.png';
 import { motion } from 'framer-motion';
-import { fadeUp, imageReveal, slideX } from '../../motion/variants';
+import {
+  fadeUp,
+  imageReveal,
+  slideX,
+  sectionContainer,
+} from '../../motion/variants';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 
 const footerLinks = [
@@ -15,15 +20,15 @@ const Footer = () => {
   return (
     <footer className="bg-surface border-t border-border">
       <motion.div
-        variants={fadeUp}
+        variants={sectionContainer}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.3 }}
         className="container pt-20 text-center"
       >
         {/* Logo */}
         <motion.div
-          variants={imageReveal}
+          variants={fadeUp}
           className="flex items-center justify-center gap-2 mb-6"
         >
           <img src={logo} alt="CampusHub Logo" className="h-8 w-8" />
@@ -40,22 +45,15 @@ const Footer = () => {
         </motion.p>
 
         {/* Newsletter */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+        >
           <motion.input
             variants={slideX('left')}
             type="email"
             placeholder="Your email"
-            className="
-              w-full sm:w-72
-              px-4 py-3
-              rounded-full
-              bg-bg
-              border border-border
-              text-text
-              placeholder:text-text-muted
-              focus:outline-none
-              focus:ring-2 focus:ring-primary/40
-            "
+            className="w-full sm:w-72 px-4 py-3 rounded-full bg-bg border border-border text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
           <motion.button
             variants={slideX('right')}
@@ -63,7 +61,7 @@ const Footer = () => {
           >
             Subscribe
           </motion.button>
-        </div>
+        </motion.div>
 
         {/* Links */}
         <motion.div
@@ -82,7 +80,10 @@ const Footer = () => {
         </motion.div>
 
         {/* Social icons */}
-        <div className="flex justify-center gap-4 mb-6">
+        <motion.div
+          variants={fadeUp}
+          className="flex justify-center gap-4 mb-6"
+        >
           <motion.a
             variants={slideX('left')}
             href="https://github.com/Rawweb"
@@ -102,10 +103,10 @@ const Footer = () => {
           >
             <FaLinkedin size={18} />
           </motion.a>
-        </div>
+        </motion.div>
 
         {/* Copyright */}
-        <hr className='border-border mb-10' />
+        <hr className="border-border mb-10" />
         <p className="text-sm text-text-muted pb-10">
           © {new Date().getFullYear()} CampusHub. Built by Computer Science
           students.

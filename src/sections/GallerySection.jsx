@@ -55,11 +55,11 @@ const GallerySection = () => {
       <div className="container">
         {/* Section header */}
         <motion.div
-          variants={fadeUp}
+          className="mb-16"
+          variants={sectionContainer}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.3 }}
-          className="mb-16"
+          viewport={{ once: true, amount: 0.3 }}
         >
           <motion.span
             variants={slideX('right')}
@@ -69,7 +69,7 @@ const GallerySection = () => {
           </motion.span>
 
           <motion.h2
-            variants={imageReveal}
+            variants={fadeUp}
             className="text-3xl md:text-4xl font-bold mb-4"
           >
             Learning in Action
@@ -85,9 +85,9 @@ const GallerySection = () => {
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={sectionContainer}
-          initial={false}
+          initial="hidden"
           whileInView="show"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.3 }}
         >
           {GALLERY_IMAGES.map((item, index) => (
             <motion.div key={index} variants={cardReveal}>
@@ -113,8 +113,17 @@ const GallerySection = () => {
 
                   {/* Content */}
                   <div className="p-4">
-                    <motion.h3 variants={imageReveal} className="text-lg font-medium mb-1">{item.title}</motion.h3>
-                    <motion.p variants={fadeUp} className="text-sm text-text-muted leading-relaxed">
+                    <motion.h3
+                      variants={fadeUp}
+                      className="text-lg font-medium mb-1"
+                    >
+                      {item.title}
+                    </motion.h3>
+
+                    <motion.p
+                      variants={fadeUp}
+                      className="text-sm text-text-muted leading-relaxed"
+                    >
                       {item.description}
                     </motion.p>
                   </div>
