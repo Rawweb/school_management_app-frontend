@@ -1,0 +1,111 @@
+import { useState } from 'react';
+import logo from '../assets/logo.png';
+import AuthLayout from '../layouts/AuthLayout';
+import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
+
+const Login = () => {
+  const [matricNumber, setMatricNumber] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault(); // stop page reload
+
+    // validate input
+    if (!matricNumber || !password) {
+      toast.error('All fields are required');
+      return; // stop execution
+    }
+
+    // show loading toast
+    toast.loading('Signing you in...', {
+      id: 'login',
+    });
+
+    // stmualte auth request
+    setTimeout(() => {
+      // ❌ Fake invalid credentials check
+      const isValid =
+        matricNumber === 'CSC123456' && password === 'password123';
+
+      if (!isValid) {
+        toast.error('Invalid credentials', {
+          id: 'login',
+        });
+        return;
+      }
+
+      // success toast
+      toast.success('Login successful', {
+        id: 'login',
+      });
+
+      // navigate('/dashboard');
+    }, 1500);
+  };
+
+  return (
+    <AuthLayout>
+      <div className="w-full max-w-md bg-surface border border-border rounded-2xl shadow-lg p-8">
+        {/* header */}
+        <div className="text-center mb-8">
+          <Link to="/">
+            <img
+              src={logo}
+              alt="CampusHub Logo"
+              className="h-10 w-10 mx-auto mb-4"
+            />
+          </Link>
+
+          <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
+          <p className="text-text-muted text-sm">
+            Sign in to continue to CampusHub
+          </p>
+        </div>
+
+        {/* form*/}
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {/* Matric Number */}
+          <div>
+            <label className="block text-sm mb-2">Matric Number</label>
+            <input
+              type="text"
+              placeholder="Enter your reg no"
+              value={matricNumber}
+              onChange={e => setMatricNumber(e.target.value)}
+              className="w-full px-4 py-3 bg-bg border border-border focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm mb-2">Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className="w-full px-4 py-3 bg-bg border border-border focus:outline-none focus:ring-2 focus:ring-primary/40"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-primary text-white py-3 font-semibold hover:bg-primary-hover
+              transition-colors"
+          >
+            Sign In
+          </button>
+
+          {/* Quote / Notice */}
+          <p className="text-center text-xs md:text-sm text-text-muted mt-6 italic">
+            “Access to this portal is provided by this team.”
+          </p>
+        </form>
+      </div>
+    </AuthLayout>
+  );
+};
+
+export default Login;
