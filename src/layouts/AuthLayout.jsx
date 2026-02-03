@@ -1,17 +1,8 @@
 import { motion } from 'framer-motion';
-import {
-  FaBook,
-  FaGraduationCap,
-  FaPenNib,
-  FaChartLine,
-} from 'react-icons/fa';
+import { FaBook, FaGraduationCap, FaPenNib, FaChartLine } from 'react-icons/fa';
+import { Outlet } from 'react-router-dom';
 
-const floatingIcons = [
-  FaBook,
-  FaGraduationCap,
-  FaPenNib,
-  FaChartLine,
-];
+const floatingIcons = [FaBook, FaGraduationCap, FaPenNib, FaChartLine];
 
 const FloatingIcon = ({ Icon, top, left, delay, size }) => {
   return (
@@ -36,17 +27,11 @@ const FloatingIcon = ({ Icon, top, left, delay, size }) => {
   );
 };
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg flex items-center justify-center px-4 text-text">
       {/* ===== Floating background icons ===== */}
-      <FloatingIcon
-        Icon={FaBook}
-        top="15%"
-        left="10%"
-        delay={0}
-        size={50}
-      />
+      <FloatingIcon Icon={FaBook} top="15%" left="10%" delay={0} size={50} />
 
       <FloatingIcon
         Icon={FaGraduationCap}
@@ -56,13 +41,7 @@ const AuthLayout = ({ children }) => {
         size={62}
       />
 
-      <FloatingIcon
-        Icon={FaPenNib}
-        top="65%"
-        left="20%"
-        delay={4}
-        size={46}
-      />
+      <FloatingIcon Icon={FaPenNib} top="65%" left="20%" delay={4} size={46} />
 
       <FloatingIcon
         Icon={FaChartLine}
@@ -74,7 +53,7 @@ const AuthLayout = ({ children }) => {
 
       {/* ===== Content (Login Card) ===== */}
       <div className="relative z-10 w-full flex justify-center">
-        {children}
+        <Outlet />
       </div>
     </div>
   );

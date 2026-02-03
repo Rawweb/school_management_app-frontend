@@ -6,11 +6,8 @@ import hero1 from '../../assets/hero.jpg';
 import hero2 from '../../assets/hero-2.jpg';
 import hero3 from '../../assets/hero-3.jpg';
 
-import {
-  sectionContainer,
-  slideX,
-  imageReveal,
-} from '../../motion/variants';
+import { sectionContainer, slideX, imageReveal } from '../../motion/variants';
+import { Link } from 'react-router-dom';
 
 const slides = [
   {
@@ -38,6 +35,16 @@ const slides = [
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const scrollToGallery = () => {
+    const section = document.getElementById('gallery');
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,14 +107,17 @@ const Hero = () => {
             </motion.p>
 
             <motion.div className="flex justify-center items-center gap-4">
-              <motion.button
-                variants={slideX('left')}
-                className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors"
-              >
-                Go to School Portal
-              </motion.button>
+              <Link to="/dashboard">
+                <motion.button
+                  variants={slideX('left')}
+                  className="bg-primary px-6 py-3 hover:bg-primary-hover transition-colors"
+                >
+                  Go to School Portal
+                </motion.button>
+              </Link>
 
               <motion.button
+                onClick={scrollToGallery}
                 variants={slideX('right')}
                 className="hidden md:flex border-2 border-primary hover:bg-primary-hover px-6 py-3 transition-colors"
               >

@@ -5,6 +5,7 @@ import {
   slideX,
   sectionContainer,
 } from '../motion/variants';
+import { Link } from 'react-router-dom';
 
 const CTASection = () => {
   return (
@@ -39,12 +40,14 @@ const CTASection = () => {
           variants={fadeUp}
           className="flex flex-col sm:flex-row gap-4"
         >
-          <motion.button
-            variants={slideX('left')}
-            className="bg-white text-primary px-6 py-3 font-semibold hover:bg-white/90 transition-colors"
-          >
-            Go to School Portal
-          </motion.button>
+          <Link to="/dashboard">
+            <motion.button
+              variants={slideX('left')}
+              className="bg-white text-primary px-6 py-3 font-semibold hover:bg-white/90 transition-colors"
+            >
+              Go to School Portal
+            </motion.button>
+          </Link>
         </motion.div>
       </motion.div>
     </section>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 import logo from '../../assets/logo.png';
 import ThemeToggle from '../ui/ThemeToggle';
+import { Link } from 'react-router-dom';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -63,9 +64,9 @@ const Navbar = () => {
 
         <div className="flex items-center gap-2">
           {/* login button */}
-          <button className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
+          <Link to="/login" className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
             Login
-          </button>
+          </Link>
           
           {/* theme toggle */}
           <ThemeToggle /> 

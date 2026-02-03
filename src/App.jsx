@@ -1,10 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTheme } from './hooks/useTheme';
-import Home from './pages/Home';
-import UserLayout from './layouts/UserLayout';
-import Login from './pages/Login';
 import { Toaster } from 'sonner';
 
+import UserLayout from './layouts/UserLayout';
+import AuthLayout from './layouts/AuthLayout';
+
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Dashboard from './dashboard/pages/Dashboard';
+import DashboardLayout from './layouts/DashboardLayout';
+import Tasks from './dashboard/pages/Tasks';
+import Results from './dashboard/pages/Results';
+import Courses from './dashboard/pages/Courses';
+import Quizzes from './dashboard/pages/Quizzes';
 
 const App = () => {
   useTheme();
@@ -27,9 +35,18 @@ const App = () => {
         </Route>
 
         {/* AUTH */}
-        <Route path="/login" element={<Login />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
 
         {/* USER DASHBOARD - PROTECTED */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/quizzes" element={<Quizzes />} />
+          <Route path="/results" element={<Results />} />
+        </Route>
       </Routes>
     </Router>
   );

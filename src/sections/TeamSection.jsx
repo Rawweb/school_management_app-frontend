@@ -9,6 +9,7 @@ import {
   imageReveal,
   sectionContainer,
 } from '../motion/variants';
+import { Link } from 'react-router-dom';
 
 const TeamSection = () => {
   const [current, setCurrent] = useState(0);
@@ -77,13 +78,14 @@ const TeamSection = () => {
             <span className="text-primary font-semibold text-2xl">?</span>{' '}
             contact us
           </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            className="border w-fit px-4 py-2 rounded-full border-primary hover:bg-primary-hover hover:text-white transition-colors cursor-pointer"
-          >
-            Join the team
-          </motion.div>
+          <Link to="/dashboard">
+            <motion.div
+              variants={fadeUp}
+              className="border w-fit px-4 py-2 rounded-full border-primary hover:bg-primary-hover hover:text-white transition-colors cursor-pointer"
+            >
+              Join the team
+            </motion.div>
+          </Link>
         </motion.div>
 
         {/* RIGHT SLIDER */}
