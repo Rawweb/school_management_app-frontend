@@ -1,26 +1,24 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import logo from '../assets/logo.png';
+import { LuPanelLeft, LuPanelRight } from 'react-icons/lu';
 import {
-  HiOutlineBookOpen,
-  HiOutlineCheckCircle,
-  HiOutlineClipboardList,
   HiOutlineHome,
-  HiOutlineLogout,
-} from 'react-icons/hi';
-
-import {
-  HiBookOpen,
-  HiCheckCircle,
-  HiClipboardList,
   HiHome,
+  HiOutlineCheckCircle,
+  HiCheckCircle,
+  HiOutlineBookOpen,
+  HiBookOpen,
+  HiOutlineClipboardList,
+  HiClipboardList,
+  HiOutlineLogout,
   HiLogout,
 } from 'react-icons/hi';
 
-import { MdOutlineQuiz } from 'react-icons/md';
-import { MdQuiz } from 'react-icons/md';
-import { useState } from 'react';
+import { MdOutlineQuiz, MdQuiz } from 'react-icons/md';
 import ConfirmModal from '../components/ui/confirmModal';
 
+/* ---------------- NAV ITEMS ---------------- */
 const navItems = [
   {
     label: 'Dashboard',
@@ -56,6 +54,7 @@ const navItems = [
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
@@ -65,26 +64,39 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="hidden md:flex w-64 border-r border-border bg-surface">
-      <div className="flex flex-col w-full p-6">
-        {/* Logo */}
-        <div className="flex items-center justify-center mx-auto gap-2 cursor-pointer mb-10 border w-fit p-4 border-border rounded-2xl">
-          <img src={logo} alt="School Logo" className="size-14" />
+    <aside
+      className={`hidden lg:flex min-h-screen border-r border-border bg-surface transition-all duration-300
+      ${collapsed ? 'w-20' : 'w-64'}`}
+    >
+      <div className="flex flex-col w-full p-4 ">
+        {/* -------- Header -------- */}
+        <div className="flex items-center justify-between mb-8">
+          {!collapsed && <img src={logo} alt="Logo" className="size-7" />}
+
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="p-2 rounded-lg hover:bg-bg"
+          >
+            {collapsed ? (
+              <LuPanelRight className="size-5" />
+            ) : (
+              <LuPanelLeft className="size-5" />
+            )}
+          </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="space-y-1 flex-1">
+        {/* -------- Navigation -------- */}
+        <nav className="flex-1 space-y-1">
           {navItems.map(
             ({ label, path, icon: Icon, activeIcon: ActiveIcon }) => (
               <NavLink
                 key={path}
                 to={path}
                 className={({ isActive }) =>
-                  `group flex items-center gap-3 px-4 py-3 text-sm rounded-xl border transition-colors ${
-                    isActive
-                      ? 'bg-surface border-border text-primary'
-                      : 'border-transparent hover:bg-surface hover:border-border hover:text-primary'
-                  }`
+                  `group relative flex items-center ${
+                    collapsed ? 'justify-center' : 'gap-3'
+                  } px-3 py-3 rounded-xl transition-colors
+                  ${isActive ? 'bg-muted text-primary' : 'hover:bg-muted'}`
                 }
               >
                 {({ isActive }) => (
@@ -99,7 +111,15 @@ const Sidebar = () => {
                         isActive ? 'block' : 'hidden group-hover:block'
                       }`}
                     />
-                    <span>{label}</span>
+
+                    {!collapsed && <span>{label}</span>}
+
+                    {/* Tooltip */}
+                    {collapsed && (
+                      <span className="absolute left-10 z-50 bg-gray-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                        {label}
+                      </span>
+                    )}
                   </>
                 )}
               </NavLink>
@@ -107,18 +127,26 @@ const Sidebar = () => {
           )}
         </nav>
 
-        {/* Logout */}
+        {/* -------- Logout -------- */}
         <button
-          type="button"
           onClick={() => setShowLogoutModal(true)}
-          className="group flex items-center gap-3 px-4 py-3 mt-6 text-sm rounded-xl border border-transparent hover:border-border hover:bg-surface transition-colors text-red-500"
+          className={`group relative flex items-center ${
+            collapsed ? 'justify-center' : 'gap-3'
+          } px-3 py-3 rounded-xl text-red-500 hover:bg-muted`}
         >
           <HiOutlineLogout className="size-5 group-hover:hidden" />
           <HiLogout className="size-5 hidden group-hover:block" />
-          <span>Logout</span>
+
+          {!collapsed && <span>Logout</span>}
+
+          {collapsed && (
+            <span className="absolute left-16 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100">
+              Logout
+            </span>
+          )}
         </button>
 
-        {/* modal */}
+        {/* -------- Modal -------- */}
         <ConfirmModal
           open={showLogoutModal}
           title="Log out"

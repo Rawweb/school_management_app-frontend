@@ -9,7 +9,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-label="Toggle theme"
       className="
-        flex items-center justify-center border border-border bg-surface p-2 text-text hover:bg-bg transition"
+        flex items-center justify-center border border-border bg-surface p-2 rounded-full text-text hover:bg-bg transition"
     >
       {theme === 'dark' ? (
         <FiSun className="size-5" />
