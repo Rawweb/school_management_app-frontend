@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import ActionCard from '../components/ActionCard';
 import ActivityList from '../components/ActivityList';
 import PerformanceChart from '../components/PerformanceChart';
@@ -5,8 +6,23 @@ import StatCard from '../components/StatCard';
 import WelcomeCard from '../components/WelcomeCard';
 import { HiOutlineBookOpen, HiOutlineCheckCircle, HiOutlineClipboardList } from 'react-icons/hi';
 import { MdOutlineQuiz } from 'react-icons/md';
+import DashboardSkeleton from '../skeletons/DashboardSkeleton';
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <div className="space-y-6">
       {/*  Welcome */}
