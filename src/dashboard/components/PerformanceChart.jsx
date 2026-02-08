@@ -1,10 +1,4 @@
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  Tooltip,
-} from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from 'recharts';
 
 const data = [
   { month: 'Jan', value: 20 },
@@ -17,24 +11,18 @@ const data = [
 
 const PerformanceChart = () => {
   return (
-    <div className="bg-surface border border-border rounded-2xl p-6 h-96 flex flex-col">
-      
+    <div className="bg-surface border border-border rounded-2xl p-6 h-96 flex flex-col w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-sm">
-          Performance Overview
-        </h3>
+        <h3 className="font-semibold text-sm">Performance Overview</h3>
 
-        <span className="text-xs text-text-muted">
-          Last 6 months
-        </span>
+        <span className="text-xs text-text-muted">Last 6 months</span>
       </div>
 
       {/* Chart */}
-      <div className="flex-1">
+      <div className="flex-1 min-h-60">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            
             {/* Slim X axis */}
             <XAxis
               dataKey="month"

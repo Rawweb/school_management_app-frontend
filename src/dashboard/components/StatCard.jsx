@@ -1,6 +1,7 @@
 import { HiArrowRight } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
-const StatCard = ({ icon: Icon, value, label, helper = 'View details' }) => {
+const StatCard = ({ icon: Icon, value, label, helper = 'View details', to }) => {
   return (
     <div className="group rounded-2xl bg-surface border border-border p-4 hover:shadow-sm transition">
       {/* Top row */}
@@ -18,12 +19,25 @@ const StatCard = ({ icon: Icon, value, label, helper = 'View details' }) => {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 flex items-center gap-1 text-xs text-text-muted group-hover:text-primary cursor-pointer">
-        <span>{helper}</span>
-        <span className="transition-transform group-hover:translate-x-1">
-          <HiArrowRight className='size-4' />
-        </span>
-      </div>
+      {to ? (
+        <Link
+          to={to}
+          className="mt-4 inline-flex items-center gap-1 text-xs text-text-muted group-hover:text-primary"
+          aria-label={`${helper}: ${label}`}
+        >
+          <span>{helper}</span>
+          <span className="transition-transform group-hover:translate-x-1">
+            <HiArrowRight className="size-4" />
+          </span>
+        </Link>
+      ) : (
+        <div className="mt-4 flex items-center gap-1 text-xs text-text-muted">
+          <span>{helper}</span>
+          <span className="transition-transform group-hover:translate-x-1">
+            <HiArrowRight className="size-4" />
+          </span>
+        </div>
+      )}
     </div>
   );
 };

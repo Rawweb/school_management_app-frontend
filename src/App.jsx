@@ -13,6 +13,7 @@ import Tasks from './dashboard/pages/Tasks';
 import Results from './dashboard/pages/Results';
 import Courses from './dashboard/pages/Courses';
 import Quizzes from './dashboard/pages/Quizzes';
+import ProtectedRoute from './routes/ProtectedRoutes';
 
 const App = () => {
   useTheme();
@@ -40,7 +41,13 @@ const App = () => {
         </Route>
 
         {/* USER DASHBOARD - PROTECTED */}
-        <Route element={<DashboardLayout />}>
+        <Route
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/courses" element={<Courses />} />

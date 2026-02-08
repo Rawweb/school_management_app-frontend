@@ -2,15 +2,20 @@ import { useState } from 'react';
 import { HiLogout, HiOutlineLogout } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from './confirmModal';
+import { toast } from 'sonner';
 
 const UserDropdown = () => {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate('/login', { replace: true });
+    localStorage.removeItem('token');
+    localStorage.removeItem('student');
+
+    toast.success('Logged out successfully');
+
+    // redirect to login
+    navigate('/login');
   };
 
   return (

@@ -1,13 +1,8 @@
 import studentImg from '../../assets/student.svg';
 
 const WelcomeCard = () => {
-  // DUMMY student data (matches authController response)
-  const student = {
-    name: 'Rawfile',
-    email: 'rawfile@example.com',
-    matricNumber: '2021513039',
-  };
-
+  const storedStudent = localStorage.getItem('student');
+  const student = storedStudent ? JSON.parse(storedStudent) : null;
   // Full readable date
   const today = new Date().toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -20,7 +15,7 @@ const WelcomeCard = () => {
     <div className="relative overflow-hidden rounded-3xl bg-primary p-6 md:p-8 text-white">
       <div className="relative z-10 flex items-center justify-between">
         {/* LEFT */}
-        <div className="max-w-lg space-y-1">
+        <div className="max-w-2xl space-y-1">
           {/* Date */}
           <span className="text-xs text-white/70">{today}</span>
 
@@ -32,9 +27,7 @@ const WelcomeCard = () => {
           {/* Student info */}
           <div className="text-sm text-white/70 flex items-center gap-2">
             <p>
-              <span className="font-medium">
-               {student.matricNumber}
-              </span>
+              <span className="font-medium">{student.matricNumber}</span>
             </p>
             <p>
               <span className="font-medium">{student.email}</span>

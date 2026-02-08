@@ -1,19 +1,22 @@
 import { useState } from 'react';
 import logo from '../assets/logo.png';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 
 const Login = () => {
   const [matricNumber, setMatricNumber] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = e => {
-    e.preventDefault(); // stop page reload
+  const navigate = useNavigate();
+
+  const handleLogin = async e => {
+    e.preventDefault(); // stop page reload on button click
 
     // validate input
     if (!matricNumber || !password) {
       toast.error('All fields are required');
-      return; // stop execution
+      return;
     }
 
     // show loading toast
@@ -21,26 +24,29 @@ const Login = () => {
       id: 'login',
     });
 
-    // stmualte auth request
-    setTimeout(() => {
-      // ❌ Fake invalid credentials check
-      const isValid =
-        matricNumber === 'CSC123456' && password === 'password123';
+    try {
+      // send request to backend
+      const res = await api.post('/auth/login', {
+        identifier: matricNumber,
+        password,
+      });
 
-      if (!isValid) {
-        toast.error('Invalid credentials', {
-          id: 'login',
-        });
-        return;
-      }
+      // save token
+      localStorage.setItem('token', res.data.token);
 
-      // success toast
+      // save student info - optional but useful
+      localStorage.setItem('student', JSON.stringify(res.data.student));
+
+      // success feedback
       toast.success('Login successful', {
         id: 'login',
       });
 
-      // navigate('/dashboard');
-    }, 1500);
+      // navigate to dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Login failed', { id: 'login' });
+    }
   };
 
   return (
@@ -62,7 +68,7 @@ const Login = () => {
       </div>
 
       {/* form*/}
-      <form className="space-y-5" onSubmit={handleSubmit}>
+      <form className="space-y-5" onSubmit={handleLogin}>
         {/* Matric Number */}
         <div>
           <label className="block text-sm mb-2">Matric Number</label>

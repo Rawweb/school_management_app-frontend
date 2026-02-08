@@ -1,34 +1,81 @@
+import { useEffect, useState } from 'react';
 import ActivityItem from './ActivityItem';
 import {
   HiOutlineCheckCircle,
   HiOutlineClipboardList,
   HiOutlineBookOpen,
 } from 'react-icons/hi';
+import api from '../../api/axios';
 
 const ActivityList = () => {
-  // DUMMY DATA (replace with backend later)
-  const activities = [
-    {
-      icon: HiOutlineCheckCircle,
-      title: 'Completed task',
-      description: 'React Assignment',
-    },
-    {
-      icon: HiOutlineClipboardList,
-      title: 'Submitted quiz',
-      description: 'CSC 401 – Mid Test',
-    },
-    {
-      icon: HiOutlineBookOpen,
-      title: 'Registered course',
-      description: 'CSC 471',
-    },
-    {
-      icon: HiOutlineCheckCircle,
-      title: 'Passed quiz',
-      description: 'Operating Systems',
-    },
-  ];
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const activityItems = [];
+
+        // fetch tasks
+        const tasksRes = await api.get('/tasks');
+
+        tasksRes.data.forEach(task => {
+          // Task added
+          activityItems.push({
+            icon: HiOutlineClipboardList,
+            title: 'Added task',
+            description: task.title,
+            createdAt: task.createdAt,
+          });
+
+          // Task completed
+          if (task.completed) {
+            activityItems.push({
+              icon: HiOutlineCheckCircle,
+              title: 'Completed task',
+              description: task.title,
+              createdAt: task.updatedAt,
+            });
+          }
+        });
+
+        // fetch quiz results
+        const quizRes = await api.get('/quizzes/results/me');
+
+        quizRes.data.forEach(result => {
+          activityItems.push({
+            icon: HiOutlineClipboardList,
+            title: result.status === 'Pass' ? 'Passed quiz' : 'Submitted quiz',
+            description: result.quizId.title,
+            createdAt: result.createdAt,
+          });
+        });
+
+        // fetch registered courses
+        const coursesRes = await api.get('/courses/registered');
+
+        coursesRes.data.forEach(course => {
+          activityItems.push({
+            icon: HiOutlineBookOpen,
+            title: 'Registered course',
+            description: `${course.code} – ${course.title}`,
+            createdAt: course.createdAt,
+          });
+        });
+
+        // sort by most recent
+        activityItems.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        // limit to recent 5
+        setActivities(activityItems.slice(0, 5));
+      } catch (error) {
+        console.error('Activity feed error:', error);
+      }
+    };
+
+    fetchActivities();
+  }, []);
 
   return (
     <div className="bg-surface border border-border rounded-2xl p-6">

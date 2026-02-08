@@ -2,53 +2,89 @@ import { useEffect, useState } from 'react';
 import CourseCard from '../components/courses/CourseCard';
 import CourseTabs from '../components/courses/CourseTabs';
 import CoursesSkeleton from '../skeletons/CoursesSkeleton';
+import api from '../../api/axios';
 
 const Courses = () => {
   const [loading, setLoading] = useState(true);
+  const [courses, setCourses] = useState([]);
+  const [registeredIds, setRegisteredIds] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200);
+    let ignore = false;
 
-    return () => clearTimeout(timer);
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        setError('');
+
+        const [coursesRes, registeredRes] = await Promise.all([
+          api.get('/courses'),
+          api.get('/courses/registered'),
+        ]);
+
+        if (ignore) return;
+
+        const normalizedCourses = (coursesRes.data || []).map(course => ({
+          ...course,
+          id: course._id,
+        }));
+
+        const registeredCourseIds = (registeredRes.data || []).map(
+          course => course._id
+        );
+
+        setCourses(normalizedCourses);
+        setRegisteredIds(registeredCourseIds);
+      } catch (err) {
+        if (!ignore) {
+          setError(err.response?.data?.message || err.message || 'Server error');
+        }
+        console.error('Courses fetch error', err);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+
+    fetchCourses();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
-
-  // Dummy courses (matches backend model)
-  const [courses] = useState([
-    {
-      id: '1',
-      code: 'CSC 471',
-      title: 'Artificial Intelligence',
-      description: 'Introduction to AI concepts and applications',
-    },
-    {
-      id: '2',
-      code: 'CSC 472',
-      title: 'Robotics',
-      description: 'Study of robots, automation, and control systems',
-    },
-    {
-      id: '3',
-      code: 'CSC 473',
-      title: 'Computer Graphics',
-      description: 'Rendering, modeling, and visual computing',
-    },
-  ]);
-
-  // Dummy registered courses (student courses)
-  const [registeredIds, setRegisteredIds] = useState(['2']);
 
   const [activeTab, setActiveTab] = useState('all');
 
   // Register course
-  const registerCourse = id => {
-    setRegisteredIds(prev => [...prev, id]);
+  const registerCourse = async id => {
+    try {
+      const res = await api.post('/courses/register', { courseId: id });
+      const registeredId = res.data?._id || id;
+
+      setRegisteredIds(prev =>
+        prev.includes(registeredId) ? prev : [registeredId, ...prev]
+      );
+
+      setCourses(prev =>
+        prev.some(course => course.id === registeredId)
+          ? prev
+          : [{ ...res.data, id: registeredId }, ...prev]
+      );
+    } catch (err) {
+      console.error('Register course error', err);
+      setError(err.response?.data?.message || err.message || 'Server error');
+    }
   };
 
   // Drop course
-  const dropCourse = id => {
-    setRegisteredIds(prev => prev.filter(courseId => courseId !== id));
+  const dropCourse = async id => {
+    try {
+      await api.delete(`/courses/drop/${id}`);
+      setRegisteredIds(prev => prev.filter(courseId => courseId !== id));
+    } catch (err) {
+      console.error('Drop course error', err);
+      setError(err.response?.data?.message || err.message || 'Server error');
+    }
   };
 
   const displayedCourses =
@@ -69,6 +105,12 @@ const Courses = () => {
           View and manage your registered courses
         </p>
       </div>
+
+      {error && (
+        <div className="rounded-2xl bg-surface border border-border p-4 text-sm text-red-500">
+          {error}
+        </div>
+      )}
 
       {/* Tabs */}
       <CourseTabs activeTab={activeTab} setActiveTab={setActiveTab} />

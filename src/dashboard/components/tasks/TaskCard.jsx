@@ -7,7 +7,7 @@ const TaskCard = ({ task, onToggle, onDelete }) => {
         <input
           type="checkbox"
           checked={task.completed}
-          onChange={() => onToggle(task.id)}
+          onChange={() => onToggle(task._id)}
         />
 
         <p
@@ -20,7 +20,7 @@ const TaskCard = ({ task, onToggle, onDelete }) => {
       </div>
 
       <button
-        onClick={() => onDelete(task.id)}
+        onClick={() => onDelete(task._id)}
         className="text-xs text-red-500 hover:underline"
       >
         <RiDeleteBin2Fill className='size-5 hover:text-red-400 transition-colors' />

@@ -3,23 +3,7 @@ import QuizzesSkeleton from '../skeletons/QuizzesSkeleton';
 import ActiveQuiz from '../components/quizzes/ActiveQuiz';
 import QuizList from '../components/quizzes/QuizList';
 import QuizResults from '../components/quizzes/QuizResults';
-import quizData from '../../constants/quizData';
-
-// Dummy quizzes to use before auth/backend is ready
-const DUMMY_QUIZZES = quizData.map((quiz, quizIndex) => ({
-  _id: `qz-${quizIndex + 1}`,
-  title: quiz.title,
-  level: quiz.level,
-  levelOrder: quizIndex + 1,
-  duration: quiz.duration,
-  category: quiz.category || 'Computer Science',
-  questions: quiz.questions.map((q, qIndex) => ({
-    _id: `qz-${quizIndex + 1}-${qIndex + 1}`,
-    questionText: q.questionText,
-    options: q.options,
-    correctAnswer: q.correctAnswer,
-  })),
-}));
+import api from '../../api/axios';
 
 const Quizzes = () => {
   const [loading, setLoading] = useState(true);
@@ -49,16 +33,23 @@ const Quizzes = () => {
       setLoading(true);
       setError('');
       try {
-        // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 800));
-        const sorted = [...DUMMY_QUIZZES].sort(
+        const [quizRes, resultsRes] = await Promise.all([
+          api.get('/quizzes'),
+          api.get('/quizzes/results/me'),
+        ]);
+
+        if (ignore) return;
+
+        const sorted = [...(quizRes.data || [])].sort(
           (a, b) => a.levelOrder - b.levelOrder
         );
         setQuizzes(sorted);
-        setResults([]);
+        setResults(resultsRes.data || []);
       } catch (err) {
         if (!ignore) {
-          setError(err.message || 'Something went wrong');
+          setError(
+            err.response?.data?.message || err.message || 'Something went wrong'
+          );
         }
       } finally {
         if (!ignore) setLoading(false);
@@ -115,13 +106,22 @@ const Quizzes = () => {
     setError('');
     setSubmitting(true);
 
-    // Dummy start (no backend yet)
-    setActiveQuiz(quiz);
-    setQuestions(quiz.questions);
-    setAnswers({});
-    setCurrentQuestionIndex(0);
-    startTimer(quiz.duration);
-    setSubmitting(false);
+    try {
+      const res = await api.post(`/quizzes/${quiz._id}/start`);
+      const questionsFromApi = res.data || [];
+
+      setActiveQuiz(quiz);
+      setQuestions(questionsFromApi);
+      setAnswers({});
+      setCurrentQuestionIndex(0);
+      startTimer(quiz.duration);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || 'Unable to start quiz'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSelectAnswer = (questionId, optionIndex) => {
@@ -137,26 +137,19 @@ const Quizzes = () => {
     setSubmitting(true);
 
     try {
-      // Dummy grading (backend will handle this later)
-      let score = 0;
-      questions.forEach(q => {
-        const selected = answers[q._id];
-        if (selected === q.correctAnswer) score++;
+      const answersPayload = Object.entries(answers)
+        .filter(([, selectedOption]) => selectedOption !== undefined)
+        .map(([questionId, selectedOption]) => ({
+          questionId,
+          selectedOption,
+        }));
+
+      const res = await api.post(`/quizzes/${activeQuiz._id}/submit`, {
+        answers: answersPayload,
       });
 
-      const totalQuestions = questions.length;
-      const status = score >= Math.ceil(totalQuestions / 2) ? 'Pass' : 'Fail';
-
-      setResults(prev => [
-        {
-          _id: `${activeQuiz._id}-result-${Date.now()}`,
-          quizId: { _id: activeQuiz._id, title: activeQuiz.title },
-          score,
-          totalQuestions,
-          status,
-        },
-        ...prev,
-      ]);
+      const resultsRes = await api.get('/quizzes/results/me');
+      setResults(resultsRes.data || []);
 
       // Reset active state
       setActiveQuiz(null);
@@ -165,10 +158,14 @@ const Quizzes = () => {
       setCurrentQuestionIndex(0);
       stopTimer();
       setError(
-        autoSubmit ? 'Time is up! Your quiz was auto-submitted.' : ''
+        autoSubmit || res.data?.expired
+          ? 'Time is up! Your quiz was auto-submitted.'
+          : ''
       );
     } catch (err) {
-      setError(err.message || 'Unable to submit quiz');
+      setError(
+        err.response?.data?.message || err.message || 'Unable to submit quiz'
+      );
     } finally {
       setSubmitting(false);
     }

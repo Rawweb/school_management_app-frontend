@@ -17,6 +17,7 @@ import {
 
 import { MdOutlineQuiz, MdQuiz } from 'react-icons/md';
 import ConfirmModal from '../components/ui/confirmModal';
+import { toast } from 'sonner';
 
 /* ---------------- NAV ITEMS ---------------- */
 const navItems = [
@@ -57,10 +58,14 @@ const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate('/login', { replace: true });
+   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('student');
+
+    toast.success('Logged out successfully');
+
+    // redirect to login
+    navigate('/login');
   };
 
   return (
