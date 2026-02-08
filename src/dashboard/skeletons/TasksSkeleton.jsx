@@ -9,7 +9,7 @@ const TasksSkeleton = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-6 w-32 mb-2" />
         <Skeleton className="h-4 w-48" />
       </div>
 
