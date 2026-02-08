@@ -64,13 +64,16 @@ const Navbar = () => {
 
         <div className="flex items-center gap-2">
           {/* login button */}
-          <Link to="/login" className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors">
+          <Link
+            to="/login"
+            className="hidden md:block bg-primary text-white px-4 py-2 hover:bg-primary-hover transition-colors"
+          >
             Login
           </Link>
-          
+
           {/* theme toggle */}
-          <ThemeToggle /> 
-          
+          <ThemeToggle />
+
           {/* mobile menu button */}
           <button
             className="md:hidden text-text hover:text-primary-hover"
@@ -100,9 +103,12 @@ const Navbar = () => {
           ))}
 
           {/* mobile login button */}
-          <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-hover transition-colors">
+          <Link
+            to="/login"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-hover transition-colors"
+          >
             Login
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

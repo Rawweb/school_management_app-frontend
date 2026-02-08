@@ -3,68 +3,78 @@ import ResultStats from '../components/results/ResultStats';
 import ResultFilters from '../components/results/ResultFilters';
 import ResultCard from '../components/results/ResultCard';
 import ResultsSkeleton from '../skeletons/ResultsSkeleton';
+import api from '../../api/axios';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
-
-  // Dummy results data (until backend is ready)
-  const [results] = useState([
-    {
-      id: 'res-1',
-      courseCode: 'CSC 471',
-      title: 'Artificial Intelligence',
-      type: 'Exam',
-      score: 78,
-      total: 100,
-      grade: 'C+',
-      status: 'Pass',
-      date: 'Jan 29, 2026',
-    },
-    {
-      id: 'res-2',
-      courseCode: 'CSC 472',
-      title: 'Robotics',
-      type: 'Quiz',
-      score: 8,
-      total: 10,
-      grade: 'B',
-      status: 'Pass',
-      date: 'Feb 1, 2026',
-    },
-    {
-      id: 'res-3',
-      courseCode: 'CSC 473',
-      title: 'Computer Graphics',
-      type: 'Assignment',
-      score: 42,
-      total: 100,
-      grade: 'F',
-      status: 'Fail',
-      date: 'Jan 24, 2026',
-    },
-    {
-      id: 'res-4',
-      courseCode: 'CSC 471',
-      title: 'Artificial Intelligence',
-      type: 'Quiz',
-      score: 3,
-      total: 10,
-      grade: 'D',
-      status: 'Fail',
-      date: 'Jan 22, 2026',
-    },
-  ]);
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200);
+    let ignore = false;
 
-    return () => clearTimeout(timer);
+    const fetchResults = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const res = await api.get('/quizzes/results/me');
+        if (!ignore) {
+          setResults(res.data || []);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(err.response?.data?.message || err.message || 'Server error');
+        }
+        console.error('Results fetch error', err);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+
+    fetchResults();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  const filteredResults = results.filter(result => {
+  const gradeForPercent = percent => {
+    if (percent >= 90) return 'A';
+    if (percent >= 80) return 'B';
+    if (percent >= 70) return 'C';
+    if (percent >= 60) return 'D';
+    return 'F';
+  };
+
+  const formatDate = value =>
+    value
+      ? new Date(value).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        })
+      : '--';
+
+  const normalizedResults = results.map(result => {
+    const total = result.totalQuestions ?? result.total ?? 0;
+    const score = result.score ?? 0;
+    const percent = total === 0 ? 0 : Math.round((score / total) * 100);
+
+    return {
+      id: result._id,
+      courseCode: 'Quiz',
+      title: result.quizId?.title || 'Quiz',
+      type: 'Quiz',
+      score,
+      total,
+      grade: gradeForPercent(percent),
+      status: result.status,
+      date: formatDate(result.createdAt),
+    };
+  });
+
+  const filteredResults = normalizedResults.filter(result => {
     if (filter === 'pass') return result.status === 'Pass';
     if (filter === 'fail') return result.status === 'Fail';
     return true;
@@ -84,8 +94,14 @@ const Results = () => {
         </p>
       </div>
 
+      {error && (
+        <div className="rounded-2xl bg-surface border border-border p-4 text-sm text-red-500">
+          {error}
+        </div>
+      )}
+
       {/* Stats */}
-      <ResultStats results={results} />
+      <ResultStats results={normalizedResults} />
 
       {/* Filters */}
       <ResultFilters filter={filter} setFilter={setFilter} />
@@ -93,7 +109,9 @@ const Results = () => {
       {/* Results list */}
       {filteredResults.length === 0 ? (
         <div className="rounded-2xl bg-surface border border-border p-6 text-sm text-text-muted">
-          No results found for this filter.
+          {results.length === 0
+            ? 'No results yet.'
+            : 'No results found for this filter.'}
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
