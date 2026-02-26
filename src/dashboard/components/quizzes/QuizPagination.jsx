@@ -3,6 +3,7 @@ const QuizPagination = ({
   answers,
   currentIndex,
   onChange,
+  disabled = false,
 }) => {
   if (!questions?.length) return null;
 
@@ -23,6 +24,7 @@ const QuizPagination = ({
                 : 'border-border bg-surface hover:bg-surface-hover'
             }`}
             onClick={() => onChange(index)}
+            disabled={disabled}
           >
             {index + 1}
           </button>

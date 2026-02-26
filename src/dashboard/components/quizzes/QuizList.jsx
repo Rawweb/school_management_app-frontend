@@ -4,7 +4,10 @@ const QuizList = ({
   activeQuiz,
   onStart,
   submitting,
+  startingQuizId,
 }) => {
+  const formatDuration = minutes => `${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
+
   return (
     <section className="space-y-4">
       <h2 className="text-lg font-semibold">Available Quizzes</h2>
@@ -18,6 +21,7 @@ const QuizList = ({
           {quizzes.map(quiz => {
             const completed = completedQuizIds.has(quiz._id);
             const isLocked = !!activeQuiz && activeQuiz._id !== quiz._id;
+            const isStartingThisQuiz = startingQuizId === quiz._id;
 
             return (
               <div
@@ -33,7 +37,7 @@ const QuizList = ({
                       {quiz.level}
                     </span>
                     <span className="px-2 py-1 rounded-full bg-bg border border-border">
-                      {quiz.duration} mins
+                      {formatDuration(quiz.duration)}
                     </span>
                   </div>
                 </div>
@@ -43,7 +47,11 @@ const QuizList = ({
                   onClick={() => onStart(quiz)}
                   disabled={completed || isLocked || submitting}
                 >
-                  {completed ? 'Completed' : 'Start Quiz'}
+                  {completed
+                    ? 'Completed'
+                    : isStartingThisQuiz
+                      ? 'Starting...'
+                      : 'Start Quiz'}
                 </button>
               </div>
             );

@@ -9,9 +9,11 @@ const ActiveQuiz = ({
   onSelectAnswer,
   onSubmit,
   submitting,
+  inputLocked,
   timeLeftLabel,
   onChangeQuestion,
 }) => {
+  const formatDuration = minutes => `${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
   if (!quiz) return null;
 
   return (
@@ -21,7 +23,7 @@ const ActiveQuiz = ({
           <p className="text-sm text-text-muted">Now taking</p>
           <h2 className="text-xl font-semibold">{quiz.title}</h2>
           <p className="text-sm text-text-muted">
-            {quiz.level} • {quiz.category} • {quiz.duration} mins
+            {quiz.level} • {quiz.category} • {formatDuration(quiz.duration)}
           </p>
         </div>
 
@@ -49,6 +51,7 @@ const ActiveQuiz = ({
               answers[questions[currentQuestionIndex]._id]
             }
             onSelect={onSelectAnswer}
+            disabled={inputLocked}
           />
 
           <QuizPagination
@@ -56,6 +59,7 @@ const ActiveQuiz = ({
             answers={answers}
             currentIndex={currentQuestionIndex}
             onChange={onChangeQuestion}
+            disabled={inputLocked}
           />
         </div>
       )}

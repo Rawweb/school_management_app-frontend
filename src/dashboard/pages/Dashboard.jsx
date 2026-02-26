@@ -43,7 +43,7 @@ const Dashboard = () => {
 
         const totalQuizzes = quizRes.data.length;
         const passedQuizzes = quizRes.data.filter(
-          q => q.status === 'pass'
+          q => q.status === 'Pass'
         ).length;
 
         // save stats
