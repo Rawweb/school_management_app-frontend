@@ -20,8 +20,9 @@ const ActivityList = () => {
         // fetch tasks
         const tasksRes = await api.get('/tasks');
 
-        tasksRes.data.forEach(task => {
-          // Task added
+        (Array.isArray(tasksRes.data) ? tasksRes.data : []).forEach(task => {
+          if (!task?.title) return;
+
           activityItems.push({
             icon: HiOutlineClipboardList,
             title: 'Added task',
@@ -29,7 +30,6 @@ const ActivityList = () => {
             createdAt: task.createdAt,
           });
 
-          // Task completed
           if (task.completed) {
             activityItems.push({
               icon: HiOutlineCheckCircle,
@@ -43,11 +43,18 @@ const ActivityList = () => {
         // fetch quiz results
         const quizRes = await api.get('/quizzes/results/me');
 
-        quizRes.data.forEach(result => {
+        (Array.isArray(quizRes.data) ? quizRes.data : []).forEach(result => {
+          const quizTitle =
+            typeof result?.quizId === 'object'
+              ? result.quizId?.title
+              : result?.quizTitle;
+
+          if (!quizTitle) return;
+
           activityItems.push({
             icon: HiOutlineClipboardList,
             title: result.status === 'Pass' ? 'Passed quiz' : 'Submitted quiz',
-            description: result.quizId.title,
+            description: quizTitle,
             createdAt: result.createdAt,
           });
         });
@@ -55,21 +62,21 @@ const ActivityList = () => {
         // fetch registered courses
         const coursesRes = await api.get('/courses/registered');
 
-        coursesRes.data.forEach(course => {
+        (Array.isArray(coursesRes.data) ? coursesRes.data : []).forEach(course => {
+          if (!course?.code || !course?.title) return;
+
           activityItems.push({
             icon: HiOutlineBookOpen,
             title: 'Registered course',
-            description: `${course.code} – ${course.title}`,
+            description: `${course.code} - ${course.title}`,
             createdAt: course.createdAt,
           });
         });
 
-        // sort by most recent
         activityItems.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 
-        // limit to recent 5
         setActivities(activityItems.slice(0, 5));
       } catch (error) {
         console.error('Activity feed error:', error);
