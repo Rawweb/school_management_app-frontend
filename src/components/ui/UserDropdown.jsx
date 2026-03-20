@@ -24,12 +24,12 @@ const UserDropdown = () => {
   return (
     <div className='absolute right-0 mt-3 w-56 rounded-md bg-surface border border-border shadow-lg overflow-hidden z-50'>
       {/* MOBILE ONLY: user info */}
-      <div className='md:hidden px-4 py-3'>
+      {/* <div className='md:hidden px-4 py-3'>
         <p className='text-sm font-semibold'>Rawfile</p>
         <p className='text-xs text-text-muted'>
           chibuikemckc@gmail.com
         </p>
-      </div>
+      </div> */}
 
       <div className=' text-white flex items-center text-sm font-semibold px-6 py-2'>
       {student.email}
