@@ -5,6 +5,17 @@ import QuizList from '../components/quizzes/QuizList';
 import QuizResults from '../components/quizzes/QuizResults';
 import api from '../../api/axios';
 
+const getDurationInMilliseconds = duration => {
+  const [minutesPart, secondsPart = '00'] = Number(duration)
+    .toFixed(2)
+    .split('.');
+
+  const minutes = Number(minutesPart);
+  const seconds = Number(secondsPart);
+
+  return (minutes * 60 + seconds) * 1000;
+};
+
 const Quizzes = () => {
   const [loading, setLoading] = useState(true);
   const [quizzes, setQuizzes] = useState([]);
@@ -128,7 +139,7 @@ const Quizzes = () => {
 
   const startTimer = (durationMinutes, startedAt = null) => {
     const startTime = startedAt ? new Date(startedAt).getTime() : Date.now();
-    const deadline = startTime + durationMinutes * 60 * 1000;
+    const deadline = startTime + getDurationInMilliseconds(durationMinutes);
     deadlineRef.current = deadline;
 
     const tick = () => {

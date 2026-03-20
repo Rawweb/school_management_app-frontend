@@ -1,6 +1,17 @@
 import QuizQuestion from './QuizQuestion';
 import QuizPagination from './QuizPagination';
 
+const getDurationParts = duration => {
+  const [minutesPart, secondsPart = '00'] = Number(duration)
+    .toFixed(2)
+    .split('.');
+
+  return {
+    minutes: Number(minutesPart),
+    seconds: Number(secondsPart),
+  };
+};
+
 const ActiveQuiz = ({
   quiz,
   questions,
@@ -13,7 +24,14 @@ const ActiveQuiz = ({
   timeLeftLabel,
   onChangeQuestion,
 }) => {
-  const formatDuration = minutes => `${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
+  const formatDuration = duration => {
+    const { minutes, seconds } = getDurationParts(duration);
+    const minuteLabel = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
+
+    if (seconds === 0) return minuteLabel;
+
+    return `${minuteLabel} ${seconds} ${seconds === 1 ? 'second' : 'seconds'}`;
+  };
   if (!quiz) return null;
 
   return (

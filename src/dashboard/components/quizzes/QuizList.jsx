@@ -1,3 +1,14 @@
+const getDurationParts = duration => {
+  const [minutesPart, secondsPart = '00'] = Number(duration)
+    .toFixed(2)
+    .split('.');
+
+  return {
+    minutes: Number(minutesPart),
+    seconds: Number(secondsPart),
+  };
+};
+
 const QuizList = ({
   quizzes,
   completedQuizIds,
@@ -6,7 +17,14 @@ const QuizList = ({
   submitting,
   startingQuizId,
 }) => {
-  const formatDuration = minutes => `${minutes} ${minutes === 1 ? 'min' : 'mins'}`;
+  const formatDuration = duration => {
+    const { minutes, seconds } = getDurationParts(duration);
+    const minuteLabel = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
+
+    if (seconds === 0) return minuteLabel;
+
+    return `${minuteLabel} ${seconds} ${seconds === 1 ? 'second' : 'seconds'}`;
+  };
 
   return (
     <section className="space-y-4">
@@ -22,6 +40,7 @@ const QuizList = ({
             const completed = completedQuizIds.has(quiz._id);
             const isLocked = !!activeQuiz && activeQuiz._id !== quiz._id;
             const isStartingThisQuiz = startingQuizId === quiz._id;
+            const isDisabled = completed || isLocked || submitting;
 
             return (
               <div
@@ -43,9 +62,13 @@ const QuizList = ({
                 </div>
 
                 <button
-                  className="mt-4 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary-hover transition-colors disabled:opacity-60"
+                  className={`mt-4 py-2 rounded-lg text-sm transition-colors ${
+                    isDisabled
+                      ? 'bg-muted text-white/70 cursor-not-allowed'
+                      : 'bg-primary text-white hover:bg-primary-hover'
+                  }`}
                   onClick={() => onStart(quiz)}
-                  disabled={completed || isLocked || submitting}
+                  disabled={isDisabled}
                 >
                   {completed
                     ? 'Completed'
