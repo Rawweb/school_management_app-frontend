@@ -3,43 +3,43 @@ import p2 from '../assets/fransisca.jpg';
 import p3 from '../assets/ife.jpg';
 import p4 from '../assets/dan.jpg';
 import p5 from '../assets/bella.jpg';
-import p6 from '../assets/p6.jpg';
+import p6 from '../assets/benny.jpg';
 
 export const team = [
   {
     name: 'Kingsley Rawfile',
-    role: 'UI/UX Designer & Frontend Lead',
+    role: 'Project Lead, Fullstack Developer & System Architect',
     image: p1,
-    text: 'I led the design and frontend development of CampusHub, focusing on usability, accessibility, and a clean academic experience.',
+    text: 'I conceived the idea for CampusHub and led the entire development process. I designed the system architecture, built both frontend and backend, structured the database, and implemented core features like authentication, quizzes, and course management.',
   },
   {
     name: 'Francisca Oluebube',
-    role: 'Backend Developer',
+    role: 'Backend Support',
     image: p2,
-    text: 'I worked on the backend logic and database structure, ensuring the system is reliable and scalable.',
+    text: 'Assisted with reviewing backend structure and understanding how data flows within the system.',
   },
   {
     name: 'Bright Ife',
-    role: 'Backend Developer',
+    role: 'API Support',
     image: p3,
-    text: 'I contributed to API development and backend integration to support quizzes and course management.',
+    text: 'Supported API testing and helped verify endpoints during development.',
   },
   {
     name: 'Nwogbo Daniel',
-    role: 'System Analyst',
+    role: 'System Review',
     image: p4,
-    text: 'I analyzed system requirements and helped translate academic needs into technical solutions.',
+    text: 'Provided input on system requirements and reviewed overall functionality from a user perspective.',
   },
   {
     name: 'Preety Bella',
-    role: 'Documentation & Research',
+    role: 'Documentation',
     image: p5,
-    text: 'I handled documentation and research to ensure the system aligns with academic standards.',
+    text: 'Helped organize basic documentation and project notes for submission.',
   },
   {
     name: 'Benny Eucharia',
-    role: 'Testing & Quality Assurance',
+    role: 'Testing Support',
     image: p6,
-    text: 'I tested the system thoroughly to ensure smooth user experience and reliability.',
+    text: 'Participated in basic testing to identify usability issues and confirm system behavior.',
   },
 ];
